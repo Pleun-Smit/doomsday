@@ -1,0 +1,1004 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Doomsday Watch</title>
+<meta name="description" content="Plan, schedule and check off every film before Avengers: Doomsday.">
+<meta name="theme-color" content="#161B20">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Doomsday Watch">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23222A31'/%3E%3Ccircle cx='32' cy='32' r='21' fill='none' stroke='%235FA38C' stroke-width='6' stroke-dasharray='99 200' transform='rotate(-90 32 32)'/%3E%3Ccircle cx='32' cy='32' r='5' fill='%23C2A15F'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:wght@400;500;700&family=Cinzel:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#161B20;
+  --plate:#222A31;
+  --plate-2:#2A333B;
+  --line:#38434C;
+  --text:#E8E1CF;
+  --muted:#9AA3A9;
+  --brass:#C2A15F;
+  --verdigris:#5FA38C;
+  --verdigris-dim:#2F4A43;
+  --ember:#D0624A;
+  --display:'Cinzel','Trajan Pro',Georgia,serif;
+  --body:'Alegreya Sans','Segoe UI',system-ui,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:
+    radial-gradient(900px 520px at 18% -8%, rgba(95,163,140,.13), transparent 70%),
+    repeating-linear-gradient(115deg, rgba(255,255,255,.012) 0 2px, transparent 2px 6px),
+    var(--bg);
+  background-attachment:fixed;
+  color:var(--text);
+  font:400 17px/1.55 var(--body);
+  min-height:100vh;
+}
+.wrap{max-width:980px;margin:0 auto;padding:28px 16px 64px}
+h1,h2,h3{font-family:var(--display);font-weight:700;letter-spacing:.02em;margin:0;color:var(--brass)}
+h1{font-size:clamp(1.7rem,4.5vw,2.6rem);line-height:1.1}
+h2{font-size:1.15rem}
+h3{font-size:1rem}
+p{margin:0}
+.sub{color:var(--muted);margin-top:6px;max-width:60ch}
+a{color:var(--verdigris)}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--brass);outline-offset:2px;border-radius:4px}
+
+/* ---------- Hero plate: the one loud element ---------- */
+.hero{
+  margin-top:24px;
+  display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center;
+  padding:28px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:
+    radial-gradient(circle at 14px 14px, #6b747b 0 2.5px, #11161a 3px 4px, transparent 4.5px),
+    radial-gradient(circle at calc(100% - 14px) 14px, #6b747b 0 2.5px, #11161a 3px 4px, transparent 4.5px),
+    radial-gradient(circle at 14px calc(100% - 14px), #6b747b 0 2.5px, #11161a 3px 4px, transparent 4.5px),
+    radial-gradient(circle at calc(100% - 14px) calc(100% - 14px), #6b747b 0 2.5px, #11161a 3px 4px, transparent 4.5px),
+    linear-gradient(160deg,#2a333b,#1d242a 60%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05), 0 20px 50px -30px rgba(0,0,0,.8);
+}
+.dial{width:220px;height:220px;display:block;filter:drop-shadow(0 0 22px rgba(95,163,140,.28))}
+.dial .tick{stroke:#3d4850;stroke-width:2;stroke-linecap:round}
+.dial .tick.lit{stroke:var(--verdigris)}
+.dial .tick.major{stroke-width:3}
+.dial .arc{transition:stroke-dashoffset .9s cubic-bezier(.2,.7,.2,1)}
+.dial .hand{transition:transform .9s cubic-bezier(.2,.7,.2,1);transform-origin:110px 110px}
+.dial-pct{font-family:var(--display);font-weight:700;font-size:40px;fill:var(--text)}
+.dial-lbl{font-family:var(--body);font-size:13px;fill:var(--muted)}
+
+.opens{color:var(--muted)}
+.countdown{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin:2px 0 10px}
+.cd-days{font-family:var(--display);font-size:clamp(2.6rem,7vw,3.6rem);line-height:1;color:var(--text)}
+.cd-unit{color:var(--muted);font-size:1.05rem}
+.cd-time{font-family:var(--display);font-size:1.35rem;color:var(--brass);font-variant-numeric:tabular-nums}
+.status{padding:10px 14px;border-radius:8px;border-left:3px solid var(--verdigris);background:rgba(95,163,140,.09)}
+.status.behind{border-color:var(--ember);background:rgba(208,98,74,.1)}
+.status.neutral{border-color:var(--line);background:rgba(255,255,255,.03)}
+.status strong{font-weight:700}
+.status small{display:block;color:var(--muted);font-size:.92rem;margin-top:2px}
+
+.today{margin-top:18px}
+.today h2{margin-bottom:8px}
+.today-empty{color:var(--muted)}
+
+/* ---------- Tabs ---------- */
+.tabs{display:flex;gap:4px;margin:32px 0 18px;border-bottom:1px solid var(--line);overflow-x:auto}
+.tab{
+  background:none;border:0;padding:10px 16px 12px;cursor:pointer;color:var(--muted);
+  font-family:var(--display);font-weight:500;font-size:1rem;letter-spacing:.03em;
+  border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap
+}
+.tab[aria-selected="true"]{color:var(--text);border-bottom-color:var(--brass)}
+.tab .count{font-family:var(--body);font-size:.85rem;color:var(--muted);margin-left:6px}
+[hidden]{display:none!important}
+
+/* ---------- Panels & controls ---------- */
+.panel{background:var(--plate);border:1px solid var(--line);border-radius:10px;padding:20px}
+.panel + .panel{margin-top:16px}
+.panel h2{margin-bottom:12px}
+.hint{color:var(--muted);font-size:.95rem}
+label{display:block;font-size:.92rem;color:var(--muted);margin-bottom:4px}
+input[type=text],input[type=number],input[type=date],select{
+  width:100%;background:#1a2026;border:1px solid var(--line);border-radius:6px;padding:9px 11px;min-height:42px
+}
+input[type=date]::-webkit-calendar-picker-indicator{filter:invert(.8)}
+input:focus,select:focus{border-color:var(--brass);outline:none}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  min-height:42px;padding:8px 16px;border-radius:6px;cursor:pointer;
+  border:1px solid var(--line);background:var(--plate-2);color:var(--text);font-weight:500
+}
+.btn:hover{border-color:#56636d}
+.btn.primary{background:var(--verdigris);border-color:var(--verdigris);color:#0f1a17;font-weight:700}
+.btn.primary:hover{background:#6db49b}
+.btn.danger{color:var(--ember);border-color:rgba(208,98,74,.45)}
+.btn.small{min-height:34px;padding:4px 10px;font-size:.92rem}
+.btn.icon{min-width:34px;min-height:34px;padding:0}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+.grid-add{display:grid;grid-template-columns:2fr 1fr 1fr 1fr auto;gap:10px;align-items:end}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+/* ---------- Check buttons ---------- */
+.entry{display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid rgba(255,255,255,.06)}
+.entry:first-child{border-top:0}
+.entry-main{flex:1;min-width:0}
+.entry-title{font-weight:500}
+.entry-meta{color:var(--muted);font-size:.92rem}
+.entry-meta .warn{color:var(--brass)}
+.check{
+  flex:none;display:inline-flex;align-items:center;gap:8px;cursor:pointer;
+  background:none;border:1px solid var(--line);border-radius:6px;padding:6px 12px 6px 8px;min-height:38px;color:var(--text)
+}
+.check::before{content:"";width:18px;height:18px;border:2px solid var(--verdigris);border-radius:4px}
+.check:hover{border-color:var(--verdigris);background:rgba(95,163,140,.08)}
+.check.done{color:var(--muted)}
+.check.done::before{background:var(--verdigris);box-shadow:inset 0 0 0 3px var(--plate)}
+
+/* ---------- Schedule ---------- */
+.week-label{font-family:var(--display);color:var(--muted);font-size:.9rem;margin:22px 0 8px}
+.week-label:first-child{margin-top:0}
+.day{display:grid;grid-template-columns:78px 1fr;gap:14px;padding:12px 14px;border-radius:8px;background:var(--plate);border:1px solid var(--line);margin-bottom:8px}
+.day.rest{background:transparent;border-style:dashed;padding:8px 14px;color:var(--muted)}
+.day.is-today{border-color:var(--verdigris);box-shadow:0 0 0 1px var(--verdigris) inset}
+.day.late{border-color:rgba(208,98,74,.55)}
+.day-date{line-height:1.1}
+.day-num{font-family:var(--display);font-size:1.6rem;color:var(--text)}
+.day.rest .day-num{font-size:1.1rem;color:var(--muted)}
+.day-wk{font-size:.85rem;color:var(--muted)}
+.day-head{display:flex;justify-content:space-between;gap:10px;font-size:.88rem;color:var(--muted)}
+.day-head .tag{color:var(--verdigris)}
+.day-head .tag.late{color:var(--ember)}
+.meter{height:4px;background:#1a2026;border-radius:2px;margin:6px 0 2px;overflow:hidden}
+.meter span{display:block;height:100%;background:var(--verdigris)}
+.meter span.over{background:var(--brass)}
+.milestone{display:flex;align-items:center;gap:12px;margin:14px 0;color:var(--brass);font-family:var(--display)}
+.milestone::before,.milestone::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--brass),transparent);opacity:.6}
+.milestone.release{color:var(--verdigris)}
+.milestone.release::before,.milestone.release::after{background:linear-gradient(90deg,transparent,var(--verdigris),transparent)}
+
+/* ---------- Watchlist ---------- */
+.film{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid rgba(255,255,255,.06)}
+.film:first-child{border-top:0}
+.film-order{font-family:var(--display);color:var(--muted);width:2ch;text-align:right;flex:none}
+.film input[type=checkbox]{width:22px;height:22px;accent-color:var(--verdigris);flex:none;cursor:pointer}
+.film.is-done .film-title{color:var(--muted);text-decoration:line-through;text-decoration-color:rgba(232,225,207,.35)}
+.film-main{flex:1;min-width:0}
+.film-title{font-weight:500;overflow-wrap:anywhere}
+.film-meta{color:var(--muted);font-size:.92rem}
+.film-actions{display:flex;gap:4px;flex:none;flex-wrap:wrap;justify-content:flex-end}
+.eps{display:inline-flex;align-items:center;gap:6px;margin-top:4px}
+.eps output{min-width:5ch;text-align:center;font-size:.92rem}
+.edit-form{width:100%;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:10px;align-items:end;padding:6px 0}
+.edit-form .row{grid-column:1/-1}
+.list-foot{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:14px;color:var(--muted);font-size:.95rem;align-items:center}
+.empty{text-align:center;padding:28px 10px;color:var(--muted)}
+.empty p + .row{justify-content:center;margin-top:14px}
+
+/* ---------- Settings ---------- */
+.weekdays{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+.weekdays label{text-align:center}
+.weekdays small{display:block;text-align:center;color:var(--muted);font-size:.82rem;margin-top:3px}
+.switch{display:flex;gap:10px;align-items:flex-start;color:var(--text);font-size:1rem;cursor:pointer}
+.switch input{width:20px;height:20px;accent-color:var(--verdigris);margin-top:3px;flex:none}
+.switch span small{display:block;color:var(--muted);font-size:.92rem}
+
+.toast{
+  position:fixed;left:50%;bottom:20px;transform:translateX(-50%) translateY(20px);opacity:0;
+  background:#0f1418;border:1px solid var(--verdigris);color:var(--text);padding:10px 16px;border-radius:8px;
+  transition:opacity .2s, transform .2s;pointer-events:none;max-width:calc(100% - 32px);z-index:10
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+footer{margin-top:40px;color:var(--muted);font-size:.85rem;text-align:center}
+
+@media (max-width:760px){
+  .hero{grid-template-columns:1fr;justify-items:center;text-align:left;padding:22px 18px}
+  .hero-body{width:100%}
+  .dial{width:180px;height:180px}
+  .grid-add,.edit-form{grid-template-columns:1fr 1fr}
+  .grid-add .f-title,.edit-form .f-title{grid-column:1/-1}
+  .grid-add .btn{grid-column:1/-1}
+  .weekdays{grid-template-columns:repeat(4,1fr)}
+  .grid-2{grid-template-columns:1fr}
+  .day{grid-template-columns:56px 1fr;gap:10px;padding:10px 12px}
+  .film{flex-wrap:wrap}
+  .film-actions{width:100%;justify-content:flex-start;padding-left:calc(2ch + 46px)}
+  .entry{flex-wrap:wrap}
+}
+@media (prefers-reduced-motion:reduce){
+  .dial .arc,.dial .hand,.toast{transition:none}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>The Doomsday Watch</h1>
+    <p class="sub">Your road to Avengers: Doomsday, one film at a time. Set your deadline and how much you can watch each day, and the plan builds itself.</p>
+  </header>
+
+  <section class="hero" id="hero" aria-live="polite"></section>
+
+  <nav class="tabs" role="tablist" aria-label="Sections">
+    <button class="tab" role="tab" id="tab-schedule" data-action="tab" data-tab="schedule" aria-controls="panel-schedule">Schedule</button>
+    <button class="tab" role="tab" id="tab-watchlist" data-action="tab" data-tab="watchlist" aria-controls="panel-watchlist">Watchlist<span class="count" id="wl-count"></span></button>
+    <button class="tab" role="tab" id="tab-settings" data-action="tab" data-tab="settings" aria-controls="panel-settings">Settings</button>
+  </nav>
+
+  <section id="panel-schedule" role="tabpanel" aria-labelledby="tab-schedule"></section>
+
+  <section id="panel-watchlist" role="tabpanel" aria-labelledby="tab-watchlist" hidden>
+    <div class="panel">
+      <h2>Add to watchlist</h2>
+      <form id="add-form" class="grid-add" autocomplete="off">
+        <div class="f-title">
+          <label for="add-title">Title</label>
+          <input type="text" id="add-title" required placeholder="e.g. Avengers: Endgame">
+        </div>
+        <div>
+          <label for="add-kind">Type</label>
+          <select id="add-kind">
+            <option value="movie">Film</option>
+            <option value="series">Series</option>
+          </select>
+        </div>
+        <div class="f-movie">
+          <label for="add-minutes">Runtime (min)</label>
+          <input type="number" id="add-minutes" min="1" max="1000" value="120" inputmode="numeric">
+        </div>
+        <div class="f-movie" aria-hidden="true"></div>
+        <div class="f-series" hidden>
+          <label for="add-episodes">Episodes</label>
+          <input type="number" id="add-episodes" min="1" max="500" value="6" inputmode="numeric">
+        </div>
+        <div class="f-series" hidden>
+          <label for="add-epmin">Min per episode</label>
+          <input type="number" id="add-epmin" min="1" max="300" value="50" inputmode="numeric">
+        </div>
+        <button class="btn primary" type="submit">Add to watchlist</button>
+      </form>
+    </div>
+    <div class="panel">
+      <h2>Watch order</h2>
+      <div id="watchlist"></div>
+    </div>
+  </section>
+
+  <section id="panel-settings" role="tabpanel" aria-labelledby="tab-settings" hidden>
+    <div class="panel">
+      <h2>Deadline</h2>
+      <div class="grid-2">
+        <div>
+          <label for="set-finish">Finish watching by</label>
+          <input type="date" id="set-finish">
+        </div>
+        <div>
+          <label for="set-release">Avengers: Doomsday release date</label>
+          <input type="date" id="set-release">
+        </div>
+      </div>
+      <p class="hint" id="date-warn" style="margin-top:10px"></p>
+    </div>
+
+    <div class="panel">
+      <h2>Watch time per day</h2>
+      <p class="hint" style="margin-bottom:12px">Minutes you can spend watching on each day of the week. Set a day to 0 to make it a rest day.</p>
+      <div class="weekdays" id="weekdays"></div>
+      <div class="row" style="margin-top:14px">
+        <div style="width:140px">
+          <label for="set-all">Every day</label>
+          <input type="number" id="set-all" min="0" max="1440" step="15" value="120" inputmode="numeric">
+        </div>
+        <button class="btn" data-action="apply-all">Apply to all days</button>
+      </div>
+      <div style="margin-top:18px">
+        <label class="switch"><input type="checkbox" id="set-split">
+          <span>Split long films across days<small>Off: each film is watched in one sitting, even if it runs past your daily time. On: films are cut exactly at your daily limit, with timestamps for where to stop and resume.</small></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Sync and backup</h2>
+      <p class="hint" style="margin-bottom:12px">Your plan is saved in this browser. To carry it to your phone or another computer, copy the sync link and open it on that device, or export a backup file.</p>
+      <div class="row">
+        <button class="btn" data-action="copy-link">Copy sync link</button>
+        <button class="btn" data-action="export">Export backup</button>
+        <button class="btn" data-action="import">Import backup</button>
+        <input type="file" id="import-file" accept="application/json,.json" hidden>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Start over</h2>
+      <p class="hint" style="margin-bottom:12px">Removes your watchlist, progress and settings from this browser.</p>
+      <button class="btn danger" data-action="reset">Reset everything</button>
+    </div>
+  </section>
+
+  <footer>Fan-made planner. Not affiliated with Marvel or Disney. Runtimes in the suggested lineup are approximate; edit them as you like.</footer>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+'use strict';
+
+const KEY = 'doomsday-watch-v1';
+const GRACE = 15; // minutes a film may run over your daily time and still count as fitting
+const DAY_SHORT = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const ORDER = [1,2,3,4,5,6,0]; // show Monday first
+
+const SUGGESTED = [
+  ['Iron Man', 126],
+  ['Captain America: The First Avenger', 124],
+  ['The Avengers', 143],
+  ['Captain America: The Winter Soldier', 136],
+  ['Avengers: Age of Ultron', 141],
+  ['Captain America: Civil War', 147],
+  ['Thor: Ragnarok', 130],
+  ['Black Panther', 134],
+  ['Avengers: Infinity War', 149],
+  ['Avengers: Endgame', 181],
+  ['Loki (seasons 1 and 2)', null, 12, 50],
+  ['Spider-Man: No Way Home', 148],
+  ['Doctor Strange in the Multiverse of Madness', 126],
+  ['Black Panther: Wakanda Forever', 161],
+  ['Ant-Man and the Wasp: Quantumania', 125],
+  ['Deadpool & Wolverine', 128],
+  ['Captain America: Brave New World', 118],
+  ['Thunderbolts*', 127],
+  ['The Fantastic Four: First Steps', 115],
+];
+
+/* ---------- dates & formatting ---------- */
+const pad = n => String(n).padStart(2, '0');
+const toStr = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const fromStr = s => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
+const todayStr = () => toStr(new Date());
+const addDays = (s, n) => { const d = fromStr(s); d.setDate(d.getDate() + n); return toStr(d); };
+const diffDays = (a, b) => Math.round((fromStr(b) - fromStr(a)) / 86400000);
+const fmtDate = (s, o) => fromStr(s).toLocaleDateString('en-GB', o || { weekday: 'short', day: 'numeric', month: 'short' });
+const fmtDur = m => { m = Math.round(m); const h = Math.floor(m / 60), r = m % 60; return h ? (r ? `${h}h ${r}m` : `${h}h`) : `${r}m`; };
+const fmtClock = m => `${Math.floor(m / 60)}:${pad(Math.round(m % 60))}`;
+const plural = (n, w) => `${n} ${w}${n === 1 ? '' : 's'}`;
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const uid = () => Math.random().toString(36).slice(2, 10);
+const isDate = s => typeof s === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(s);
+const clampInt = (v, lo, hi, dflt) => { v = Math.round(Number(v)); return Number.isFinite(v) ? Math.min(hi, Math.max(lo, v)) : dflt; };
+
+/* ---------- state ---------- */
+function defaults() {
+  return {
+    v: 1,
+    releaseDate: '2026-12-18',
+    finishDate: '2026-12-17',
+    perDay: [210, 150, 150, 150, 150, 180, 210], // Sun..Sat
+    split: false,
+    items: [],
+    log: [], // {date, itemId, minutes} – what you watched from the schedule, per day
+  };
+}
+
+function normalize(raw) {
+  const d = defaults();
+  if (!raw || typeof raw !== 'object') return d;
+  const s = {
+    v: 1,
+    releaseDate: isDate(raw.releaseDate) ? raw.releaseDate : d.releaseDate,
+    finishDate: isDate(raw.finishDate) ? raw.finishDate : d.finishDate,
+    perDay: Array.isArray(raw.perDay) && raw.perDay.length === 7 ? raw.perDay.map(n => clampInt(n, 0, 1440, 0)) : d.perDay,
+    split: !!raw.split,
+    items: [],
+    log: [],
+  };
+  if (Array.isArray(raw.items)) {
+    for (const it of raw.items) {
+      if (!it || typeof it.title !== 'string' || !it.title.trim()) continue;
+      const series = it.kind === 'series';
+      const item = {
+        id: typeof it.id === 'string' ? it.id : uid(),
+        title: it.title.trim().slice(0, 200),
+        kind: series ? 'series' : 'movie',
+        minutes: clampInt(it.minutes, 1, 1000, 120),
+        episodes: clampInt(it.episodes, 1, 500, 1),
+        epMinutes: clampInt(it.epMinutes, 1, 300, 45),
+        progress: clampInt(it.progress, 0, 1000, 0),
+        epsWatched: clampInt(it.epsWatched, 0, 500, 0),
+        watchedOn: isDate(it.watchedOn) ? it.watchedOn : null,
+      };
+      item.progress = Math.min(item.progress, item.minutes);
+      item.epsWatched = Math.min(item.epsWatched, item.episodes);
+      s.items.push(item);
+    }
+  }
+  if (Array.isArray(raw.log)) {
+    const ids = new Set(s.items.map(i => i.id));
+    s.log = raw.log.filter(e => e && isDate(e.date) && ids.has(e.itemId) && Number(e.minutes) > 0)
+      .map(e => ({ date: e.date, itemId: e.itemId, minutes: Math.round(Number(e.minutes)) }));
+  }
+  return s;
+}
+
+let state = (() => { try { return normalize(JSON.parse(localStorage.getItem(KEY))); } catch (e) { return defaults(); } })();
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { toast('Could not save in this browser. Export a backup to keep your plan.'); } };
+
+/* ---------- item helpers ---------- */
+const total = it => it.kind === 'series' ? it.episodes * it.epMinutes : it.minutes;
+const remaining = it => it.kind === 'series' ? (it.episodes - it.epsWatched) * it.epMinutes : Math.max(0, it.minutes - it.progress);
+const isDone = it => remaining(it) <= 0;
+const byId = id => state.items.find(i => i.id === id);
+
+function setDone(it, done) {
+  if (done) {
+    if (it.kind === 'series') it.epsWatched = it.episodes; else it.progress = it.minutes;
+    it.watchedOn = it.watchedOn || todayStr();
+  } else {
+    it.progress = 0; it.epsWatched = 0; it.watchedOn = null;
+    state.log = state.log.filter(e => e.itemId !== it.id);
+  }
+}
+
+function logWatch(itemId, minutes) {
+  if (minutes <= 0) return;
+  const t = todayStr();
+  const e = state.log.find(x => x.date === t && x.itemId === itemId);
+  if (e) e.minutes += minutes; else state.log.push({ date: t, itemId, minutes });
+}
+
+/* ---------- scheduler ---------- */
+function buildSchedule() {
+  const t = todayStr();
+  const watchedToday = state.log.filter(e => e.date === t).reduce((a, e) => a + e.minutes, 0);
+  const queue = [];
+  for (const it of state.items) {
+    if (isDone(it)) continue;
+    if (it.kind === 'series') {
+      for (let ep = it.epsWatched + 1; ep <= it.episodes; ep++) queue.push({ it, kind: 'ep', ep, minutes: it.epMinutes });
+    } else {
+      queue.push({ it, kind: 'movie', start: it.progress, minutes: it.minutes - it.progress });
+    }
+  }
+  const days = [];
+  if (!queue.length) return { days, watchedToday };
+  if (state.perDay.every(m => m <= 0)) return { days, watchedToday, impossible: true };
+
+  let date = t;
+  for (let guard = 0; queue.length && guard < 1500; guard++, date = addDays(date, 1)) {
+    const base = state.perDay[fromStr(date).getDay()];
+    const cap = date === t ? Math.max(0, base - watchedToday) : base;
+    const day = { date, base, cap, used: 0, entries: [] };
+    while (cap > 0 && queue.length) {
+      const u = queue[0];
+      const room = cap - day.used;
+      if (room <= 0) break;
+      if (state.split && u.kind === 'movie' && u.minutes > room + GRACE) {
+        day.entries.push({ it: u.it, kind: 'movie', minutes: room, from: u.start, to: u.start + room, part: true });
+        u.start += room; u.minutes -= room; day.used += room;
+        break;
+      }
+      const fits = u.minutes <= room + GRACE;
+      const overflowAlone = !day.entries.length && u.minutes > room;
+      if (fits || overflowAlone) {
+        const entry = { it: u.it, kind: u.kind, minutes: u.minutes, ep: u.ep };
+        if (u.kind === 'movie') { entry.from = u.start; entry.to = u.it.minutes; entry.part = u.start > 0; }
+        entry.over = u.minutes > room + GRACE;
+        day.entries.push(entry);
+        day.used += u.minutes;
+        queue.shift();
+        if (!fits) break;
+      } else break;
+    }
+    days.push(day);
+  }
+  return { days, watchedToday };
+}
+
+function entryLabel(e) {
+  if (e.kind === 'ep') return { title: e.it.title, meta: `Episode ${e.ep} of ${e.it.episodes} · ${fmtDur(e.minutes)}` };
+  if (e.part) return { title: e.it.title, meta: `${fmtClock(e.from)} to ${e.to >= e.it.minutes ? 'the end' : fmtClock(e.to)} · ${fmtDur(e.minutes)}` };
+  return { title: e.it.title, meta: fmtDur(e.minutes) };
+}
+
+function entryHtml(e) {
+  const l = entryLabel(e);
+  const attrs = `data-action="watched" data-item="${e.it.id}" data-kind="${e.kind}"` +
+    (e.kind === 'ep' ? ` data-ep="${e.ep}"` : ` data-to="${e.to}"`);
+  return `<div class="entry">
+    <div class="entry-main">
+      <div class="entry-title">${esc(l.title)}</div>
+      <div class="entry-meta">${esc(l.meta)}${e.over ? ' · <span class="warn">longer than your daily time</span>' : ''}</div>
+    </div>
+    <button class="check" ${attrs} aria-label="Mark ${esc(l.title)}${e.kind === 'ep' ? ' episode ' + e.ep : ''} as watched">Watched</button>
+  </div>`;
+}
+
+/* ---------- status ---------- */
+function computeStatus(plan) {
+  const t = todayStr();
+  const remainingMin = state.items.reduce((a, i) => a + remaining(i), 0);
+  const totalMin = state.items.reduce((a, i) => a + total(i), 0);
+  const doneCount = state.items.filter(isDone).length;
+  const out = { remainingMin, totalMin, doneCount, count: state.items.length };
+  if (!state.items.length) return { ...out, kind: 'neutral', text: 'Your watchlist is empty.', small: 'Add films in the Watchlist tab, or load the suggested lineup.' };
+  if (remainingMin <= 0) return { ...out, kind: 'ok', text: 'Every film is watched. You are ready for Doomsday.', small: `${fmtDur(totalMin)} of viewing complete.` };
+  if (plan.impossible) return { ...out, kind: 'behind', text: 'Every day is set to 0 minutes.', small: 'Add some watch time in Settings so a schedule can be made.' };
+
+  const last = plan.days.filter(d => d.entries.length).pop();
+  const finish = state.finishDate;
+  out.projected = last.date;
+  if (finish < t) return { ...out, kind: 'behind', text: `Your finish date (${fmtDate(finish)}) has passed.`, small: 'Pick a new finish date in Settings.' };
+
+  if (last.date <= finish) {
+    const spare = diffDays(last.date, finish);
+    return { ...out, kind: 'ok', text: `On track. You will finish on ${fmtDate(last.date)}.`,
+      small: spare ? `${plural(spare, 'day')} to spare before your deadline. ${fmtDur(remainingMin)} left to watch.` : `Right on your deadline. ${fmtDur(remainingMin)} left to watch.` };
+  }
+
+  // Behind: how much would be needed?
+  let watchDays = 0;
+  for (let d = t; d <= finish; d = addDays(d, 1)) if (state.perDay[fromStr(d).getDay()] > 0) watchDays++;
+  const late = diffDays(finish, last.date);
+  let small = `At this pace you finish ${fmtDate(last.date)}, ${plural(late, 'day')} late. `;
+  if (watchDays > 0) {
+    const need = Math.ceil((remainingMin + plan.watchedToday) / watchDays);
+    small += `To make it, watch about ${fmtDur(need)} on each watch day, move your finish date, or drop a title.`;
+  } else small += 'You have no watch days left before your deadline; add watch time or move the finish date.';
+  return { ...out, kind: 'behind', text: 'Behind schedule.', small };
+}
+
+/* ---------- rendering ---------- */
+let currentTab = state.items.length ? 'schedule' : 'watchlist';
+let editingId = null;
+
+function dialSvg(pct, done, count) {
+  const C = 110, R = 76, circ = 2 * Math.PI * R;
+  const lit = Math.round(pct * 60);
+  let ticks = '';
+  for (let i = 0; i < 60; i++) {
+    const a = (i / 60) * 2 * Math.PI - Math.PI / 2;
+    const major = i % 5 === 0;
+    const r1 = major ? 88 : 92, r2 = 100;
+    ticks += `<line class="tick${i < lit ? ' lit' : ''}${major ? ' major' : ''}" x1="${(C + r1 * Math.cos(a)).toFixed(2)}" y1="${(C + r1 * Math.sin(a)).toFixed(2)}" x2="${(C + r2 * Math.cos(a)).toFixed(2)}" y2="${(C + r2 * Math.sin(a)).toFixed(2)}"/>`;
+  }
+  return `<svg class="dial" viewBox="0 0 220 220" role="img" aria-label="${Math.round(pct * 100)} percent watched">
+    <circle cx="110" cy="110" r="106" fill="#1a2026" stroke="#3a454e"/>
+    ${ticks}
+    <circle cx="110" cy="110" r="${R}" fill="none" stroke="#2c363e" stroke-width="10"/>
+    <circle class="arc" cx="110" cy="110" r="${R}" fill="none" stroke="#5FA38C" stroke-width="10" stroke-linecap="round"
+      stroke-dasharray="${circ.toFixed(2)}" stroke-dashoffset="${(circ * (1 - pct)).toFixed(2)}" transform="rotate(-90 110 110)"/>
+    <g class="hand" style="transform:rotate(${(pct * 360).toFixed(1)}deg)">
+      <line x1="110" y1="110" x2="110" y2="20" stroke="#C2A15F" stroke-width="2" stroke-linecap="round" opacity=".85"/>
+    </g>
+    <circle cx="110" cy="110" r="58" fill="#1d242a"/>
+    <text class="dial-pct" x="110" y="118" text-anchor="middle">${Math.round(pct * 100)}%</text>
+    <text class="dial-lbl" x="110" y="140" text-anchor="middle">${done} of ${count} watched</text>
+  </svg>`;
+}
+
+function renderHero(plan, st) {
+  const t = todayStr();
+  const pct = st.totalMin ? (st.totalMin - st.remainingMin) / st.totalMin : 0;
+  const todayPlan = plan.days.find(d => d.date === t);
+  const next = plan.days.find(d => d.date > t && d.entries.length);
+  let today = '';
+  if (!state.items.length) {
+    today = `<p class="today-empty">Nothing scheduled yet.</p>`;
+  } else if (st.remainingMin <= 0) {
+    today = `<p class="today-empty">Nothing left to watch. Enjoy the premiere.</p>`;
+  } else if (todayPlan && todayPlan.entries.length) {
+    today = todayPlan.entries.map(entryHtml).join('');
+  } else {
+    const why = state.perDay[new Date().getDay()] > 0 ? `You've done your watching for today.` : 'Rest day.';
+    const nx = next ? ` Next up on ${fmtDate(next.date)}: ${esc(entryLabel(next.entries[0]).title)}.` : '';
+    today = `<p class="today-empty">${why}${nx}</p>`;
+  }
+  document.getElementById('hero').innerHTML = `
+    <div>${dialSvg(pct, st.doneCount, st.count)}</div>
+    <div class="hero-body">
+      <p class="opens">Avengers: Doomsday opens in</p>
+      <div class="countdown" id="countdown"></div>
+      <div class="status ${st.kind === 'behind' ? 'behind' : st.kind === 'neutral' ? 'neutral' : ''}">
+        <strong>${st.text}</strong><small>${st.small}</small>
+      </div>
+      <div class="today">
+        <h2>Today, ${esc(fmtDate(t, { weekday: 'long', day: 'numeric', month: 'long' }))}</h2>
+        ${today}
+      </div>
+    </div>`;
+  tickCountdown();
+}
+
+function tickCountdown() {
+  const el = document.getElementById('countdown');
+  if (!el) return;
+  const target = fromStr(state.releaseDate).getTime();
+  const ms = target - Date.now();
+  if (ms <= 0) { el.innerHTML = `<span class="cd-days">Doomsday</span><span class="cd-unit">is here.</span>`; return; }
+  const s = Math.floor(ms / 1000);
+  const d = Math.floor(s / 86400), h = Math.floor(s % 86400 / 3600), m = Math.floor(s % 3600 / 60), sec = s % 60;
+  el.innerHTML = `<span class="cd-days">${d}</span><span class="cd-unit">${d === 1 ? 'day' : 'days'}</span><span class="cd-time">${pad(h)}:${pad(m)}:${pad(sec)}</span>`;
+}
+
+function renderSchedule(plan, st) {
+  const el = document.getElementById('panel-schedule');
+  const t = todayStr();
+  if (!state.items.length) {
+    el.innerHTML = `<div class="panel empty"><p>Add the films you want to watch and your schedule appears here.</p>
+      <div class="row"><button class="btn primary" data-action="load-suggested">Load suggested lineup</button><button class="btn" data-action="tab" data-tab="watchlist">Add my own films</button></div></div>`;
+    return;
+  }
+  if (st.remainingMin <= 0) {
+    el.innerHTML = `<div class="panel empty"><p>All ${plural(state.items.length, 'title')} watched. Nothing left to schedule.</p></div>`;
+    return;
+  }
+  if (plan.impossible) {
+    el.innerHTML = `<div class="panel empty"><p>Every day of the week is set to 0 minutes.</p><div class="row"><button class="btn primary" data-action="tab" data-tab="settings">Set watch time</button></div></div>`;
+    return;
+  }
+  let html = '';
+  let lastWeek = null;
+  let finishShown = false;
+  for (const d of plan.days) {
+    if (!finishShown && d.date > state.finishDate) {
+      html += `<div class="milestone">Finish by ${esc(fmtDate(state.finishDate))}</div>`;
+      finishShown = true;
+    }
+    const dt = fromStr(d.date);
+    const monday = addDays(d.date, -((dt.getDay() + 6) % 7));
+    if (monday !== lastWeek) {
+      html += `<div class="week-label">Week of ${esc(fmtDate(monday, { day: 'numeric', month: 'long' }))}</div>`;
+      lastWeek = monday;
+    }
+    const isToday = d.date === t;
+    const late = d.date > state.finishDate;
+    const dateCol = `<div class="day-date"><div class="day-num">${dt.getDate()}</div><div class="day-wk">${DAY_SHORT[dt.getDay()]} ${esc(fmtDate(d.date, { month: 'short' }))}</div></div>`;
+    if (!d.entries.length) {
+      const msg = d.base <= 0 ? 'Rest day' : 'Today’s watching is done';
+      html += `<div class="day rest${isToday ? ' is-today' : ''}">${dateCol}<div style="align-self:center">${msg}</div></div>`;
+      continue;
+    }
+    const pctUsed = d.cap ? Math.min(100, (d.used / d.cap) * 100) : 100;
+    const tags = [isToday ? '<span class="tag">Today</span>' : '', late ? '<span class="tag late">After your finish date</span>' : ''].filter(Boolean).join(' ');
+    html += `<div class="day${isToday ? ' is-today' : ''}${late ? ' late' : ''}">
+      ${dateCol}
+      <div>
+        <div class="day-head"><span>${tags || '&nbsp;'}</span><span>${fmtDur(d.used)} of ${fmtDur(d.cap)}</span></div>
+        <div class="meter"><span class="${d.used > d.cap + GRACE ? 'over' : ''}" style="width:${pctUsed}%"></span></div>
+        ${d.entries.map(entryHtml).join('')}
+      </div>
+    </div>`;
+  }
+  if (!finishShown) html += `<div class="milestone">Finish by ${esc(fmtDate(state.finishDate))}</div>`;
+  html += `<div class="milestone release">${esc(fmtDate(state.releaseDate, { weekday: 'short', day: 'numeric', month: 'long' }))}: Avengers: Doomsday in theaters</div>`;
+  el.innerHTML = html;
+}
+
+function renderWatchlist() {
+  const el = document.getElementById('watchlist');
+  document.getElementById('wl-count').textContent = state.items.length ? String(state.items.length) : '';
+  if (!state.items.length) {
+    el.innerHTML = `<div class="empty"><p>No films yet. Add your own above, or start from a lineup of the main films leading into Doomsday.</p>
+      <div class="row"><button class="btn primary" data-action="load-suggested">Load suggested lineup</button></div></div>`;
+    return;
+  }
+  const rows = state.items.map((it, i) => {
+    if (it.id === editingId) {
+      const series = it.kind === 'series';
+      return `<div class="film"><form class="edit-form" data-edit="${it.id}">
+        <div class="f-title"><label for="e-title">Title</label><input type="text" id="e-title" name="title" required value="${esc(it.title)}"></div>
+        ${series
+          ? `<div><label for="e-eps">Episodes</label><input type="number" id="e-eps" name="episodes" min="1" max="500" value="${it.episodes}"></div>
+             <div><label for="e-epmin">Min per episode</label><input type="number" id="e-epmin" name="epMinutes" min="1" max="300" value="${it.epMinutes}"></div>`
+          : `<div><label for="e-min">Runtime (min)</label><input type="number" id="e-min" name="minutes" min="1" max="1000" value="${it.minutes}"></div><div></div>`}
+        <div></div>
+        <div class="row"><button class="btn primary small" type="submit">Save changes</button><button class="btn small" type="button" data-action="cancel-edit">Cancel</button></div>
+      </form></div>`;
+    }
+    const done = isDone(it);
+    let meta = it.kind === 'series' ? `${it.episodes} episodes × ${fmtDur(it.epMinutes)} (${fmtDur(total(it))})` : fmtDur(it.minutes);
+    if (done && it.watchedOn) meta += ` · watched ${fmtDate(it.watchedOn, { day: 'numeric', month: 'short' })}`;
+    else if (it.kind === 'movie' && it.progress > 0) meta += ` · stopped at ${fmtClock(it.progress)}`;
+    const eps = it.kind === 'series' ? `<div class="eps">
+        <button class="btn icon small" data-action="ep-minus" data-item="${it.id}" aria-label="One fewer episode watched" ${it.epsWatched <= 0 ? 'disabled' : ''}>−</button>
+        <output>${it.epsWatched}/${it.episodes}</output>
+        <button class="btn icon small" data-action="ep-plus" data-item="${it.id}" aria-label="One more episode watched" ${it.epsWatched >= it.episodes ? 'disabled' : ''}>+</button>
+      </div>` : '';
+    return `<div class="film${done ? ' is-done' : ''}">
+      <span class="film-order">${i + 1}</span>
+      <input type="checkbox" data-toggle="${it.id}" ${done ? 'checked' : ''} aria-label="${esc(it.title)} watched">
+      <div class="film-main"><div class="film-title">${esc(it.title)}</div><div class="film-meta">${esc(meta)}</div>${eps}</div>
+      <div class="film-actions">
+        <button class="btn icon small" data-action="up" data-item="${it.id}" aria-label="Move ${esc(it.title)} earlier" ${i === 0 ? 'disabled' : ''}>↑</button>
+        <button class="btn icon small" data-action="down" data-item="${it.id}" aria-label="Move ${esc(it.title)} later" ${i === state.items.length - 1 ? 'disabled' : ''}>↓</button>
+        <button class="btn small" data-action="edit" data-item="${it.id}">Edit</button>
+        <button class="btn small danger" data-action="delete" data-item="${it.id}">Remove</button>
+      </div>
+    </div>`;
+  }).join('');
+  const tot = state.items.reduce((a, i) => a + total(i), 0);
+  const missing = SUGGESTED.some(s => !state.items.some(i => i.title.toLowerCase() === s[0].toLowerCase()));
+  el.innerHTML = rows + `<div class="list-foot"><span>${plural(state.items.length, 'title')}, ${fmtDur(tot)} in total. Checking a title here marks it as already seen without using today's watch time.</span>
+    ${missing ? '<button class="btn small" data-action="load-suggested">Add missing suggested films</button>' : ''}</div>`;
+  const first = el.querySelector('.edit-form input');
+  if (first) first.focus();
+}
+
+function renderSettings() {
+  document.getElementById('set-finish').value = state.finishDate;
+  document.getElementById('set-release').value = state.releaseDate;
+  document.getElementById('set-split').checked = state.split;
+  document.getElementById('weekdays').innerHTML = ORDER.map(d => `<div>
+      <label for="wd-${d}">${DAY_SHORT[d]}</label>
+      <input type="number" id="wd-${d}" data-weekday="${d}" min="0" max="1440" step="15" value="${state.perDay[d]}" inputmode="numeric">
+      <small>${state.perDay[d] ? fmtDur(state.perDay[d]) : 'rest'}</small>
+    </div>`).join('');
+  updateDateWarn();
+}
+
+function updateDateWarn() {
+  const w = document.getElementById('date-warn');
+  const weekly = state.perDay.reduce((a, b) => a + b, 0);
+  let msg = `You have ${fmtDur(weekly)} of watch time per week.`;
+  if (state.finishDate > state.releaseDate) msg = 'Your finish date is after the release date. Move it earlier to be ready on opening day.';
+  w.textContent = msg;
+  w.style.color = state.finishDate > state.releaseDate ? 'var(--ember)' : '';
+}
+
+function renderTabs() {
+  for (const name of ['schedule', 'watchlist', 'settings']) {
+    document.getElementById('tab-' + name).setAttribute('aria-selected', String(currentTab === name));
+    document.getElementById('panel-' + name).hidden = currentTab !== name;
+  }
+}
+
+function render({ settings = true } = {}) {
+  const plan = buildSchedule();
+  const st = computeStatus(plan);
+  renderHero(plan, st);
+  renderSchedule(plan, st);
+  renderWatchlist();
+  if (settings) renderSettings();
+  renderTabs();
+}
+
+/* ---------- toast ---------- */
+let toastTimer;
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+}
+
+/* ---------- sync helpers ---------- */
+const b64enc = s => { const bytes = new TextEncoder().encode(s); let bin = ''; bytes.forEach(b => bin += String.fromCharCode(b)); return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); };
+const b64dec = s => { s = s.replace(/-/g, '+').replace(/_/g, '/'); while (s.length % 4) s += '='; const bin = atob(s); return new TextDecoder().decode(Uint8Array.from(bin, c => c.charCodeAt(0))); };
+
+function importData(raw, source) {
+  if (!raw || !Array.isArray(raw.items)) { toast('That file is not a Doomsday Watch backup.'); return; }
+  if (state.items.length && !confirm(`Replace the plan on this device with the one from ${source}?`)) return;
+  state = normalize(raw);
+  save();
+  currentTab = 'schedule';
+  render();
+  toast('Plan imported.');
+}
+
+/* ---------- events ---------- */
+document.addEventListener('click', e => {
+  const btn = e.target.closest('[data-action]');
+  if (!btn || btn.disabled) return;
+  const a = btn.dataset.action;
+  const it = btn.dataset.item ? byId(btn.dataset.item) : null;
+
+  switch (a) {
+    case 'tab':
+      currentTab = btn.dataset.tab; editingId = null; render({ settings: false }); renderSettings();
+      window.scrollTo({ top: document.querySelector('.tabs').offsetTop - 8, behavior: 'smooth' });
+      if (currentTab === 'watchlist' && !state.items.length) document.getElementById('add-title').focus();
+      break;
+
+    case 'watched': {
+      if (!it) return;
+      if (btn.dataset.kind === 'ep') {
+        const ep = Number(btn.dataset.ep);
+        const before = it.epsWatched;
+        it.epsWatched = Math.max(it.epsWatched, ep);
+        logWatch(it.id, (it.epsWatched - before) * it.epMinutes);
+        toast(`Episode ${ep} of ${it.title} checked off.`);
+      } else {
+        const to = Math.min(it.minutes, Number(btn.dataset.to) || it.minutes);
+        const before = it.progress;
+        it.progress = Math.max(it.progress, to);
+        logWatch(it.id, it.progress - before);
+        toast(isDone(it) ? `${it.title} checked off.` : `${it.title}: resume at ${fmtClock(it.progress)} next time.`);
+      }
+      if (isDone(it)) it.watchedOn = todayStr();
+      save(); render({ settings: false });
+      break;
+    }
+
+    case 'ep-plus':
+      if (!it) return;
+      it.epsWatched = Math.min(it.episodes, it.epsWatched + 1);
+      if (isDone(it)) it.watchedOn = todayStr();
+      save(); render({ settings: false });
+      break;
+
+    case 'ep-minus': {
+      if (!it) return;
+      it.epsWatched = Math.max(0, it.epsWatched - 1);
+      it.watchedOn = null;
+      const t = todayStr();
+      const e = state.log.find(x => x.itemId === it.id && x.date === t);
+      if (e) { e.minutes -= it.epMinutes; if (e.minutes <= 0) state.log = state.log.filter(x => x !== e); }
+      save(); render({ settings: false });
+      break;
+    }
+
+    case 'up': case 'down': {
+      const i = state.items.indexOf(it), j = a === 'up' ? i - 1 : i + 1;
+      if (i < 0 || j < 0 || j >= state.items.length) return;
+      [state.items[i], state.items[j]] = [state.items[j], state.items[i]];
+      save(); render({ settings: false });
+      const again = document.querySelector(`[data-action="${a}"][data-item="${it.id}"]`);
+      if (again && !again.disabled) again.focus();
+      break;
+    }
+
+    case 'edit': editingId = it ? it.id : null; renderWatchlist(); break;
+    case 'cancel-edit': editingId = null; renderWatchlist(); break;
+
+    case 'delete':
+      if (!it || !confirm(`Remove ${it.title} from your watchlist?`)) return;
+      state.items = state.items.filter(x => x !== it);
+      state.log = state.log.filter(x => x.itemId !== it.id);
+      save(); render({ settings: false }); toast(`${it.title} removed.`);
+      break;
+
+    case 'load-suggested': {
+      let added = 0;
+      for (const [title, minutes, episodes, epMinutes] of SUGGESTED) {
+        if (state.items.some(i => i.title.toLowerCase() === title.toLowerCase())) continue;
+        state.items.push(normalize({ items: [{ title, kind: episodes ? 'series' : 'movie', minutes: minutes || 120, episodes: episodes || 1, epMinutes: epMinutes || 45 }] }).items[0]);
+        added++;
+      }
+      save(); currentTab = 'watchlist'; render({ settings: false });
+      toast(added ? `Added ${plural(added, 'title')}. Reorder or remove any you like.` : 'All suggested films are already on your list.');
+      break;
+    }
+
+    case 'apply-all': {
+      const v = clampInt(document.getElementById('set-all').value, 0, 1440, 120);
+      state.perDay = state.perDay.map(() => v);
+      save(); render(); toast(`Every day set to ${v ? fmtDur(v) : 'rest'}.`);
+      break;
+    }
+
+    case 'copy-link': {
+      const url = location.href.split('#')[0] + '#sync=' + b64enc(JSON.stringify(state));
+      const done = () => toast('Sync link copied. Open it on your other device.');
+      if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(url).then(done, () => prompt('Copy this link:', url));
+      else prompt('Copy this link:', url);
+      break;
+    }
+
+    case 'export': {
+      const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `doomsday-watch-backup-${todayStr()}.json`;
+      document.body.appendChild(link); link.click(); link.remove();
+      setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+      toast('Backup exported.');
+      break;
+    }
+
+    case 'import': document.getElementById('import-file').click(); break;
+
+    case 'reset':
+      if (!confirm('Reset everything? Your watchlist, progress and settings will be removed from this browser.')) return;
+      state = defaults(); save(); currentTab = 'watchlist'; editingId = null; render(); toast('Everything reset.');
+      break;
+  }
+});
+
+document.addEventListener('change', e => {
+  const t = e.target;
+  if (t.dataset.toggle) {
+    const it = byId(t.dataset.toggle);
+    if (!it) return;
+    setDone(it, t.checked);
+    save(); render({ settings: false });
+    return;
+  }
+  if (t.dataset.weekday !== undefined) {
+    state.perDay[Number(t.dataset.weekday)] = clampInt(t.value, 0, 1440, 0);
+    save(); render({ settings: false });
+    t.nextElementSibling.textContent = state.perDay[Number(t.dataset.weekday)] ? fmtDur(state.perDay[Number(t.dataset.weekday)]) : 'rest';
+    updateDateWarn();
+    return;
+  }
+  if (t.id === 'set-finish' && isDate(t.value)) { state.finishDate = t.value; save(); render({ settings: false }); updateDateWarn(); }
+  if (t.id === 'set-release' && isDate(t.value)) { state.releaseDate = t.value; save(); render({ settings: false }); updateDateWarn(); }
+  if (t.id === 'set-split') { state.split = t.checked; save(); render({ settings: false }); }
+  if (t.id === 'add-kind') {
+    const series = t.value === 'series';
+    document.querySelectorAll('#add-form .f-movie').forEach(x => x.hidden = series);
+    document.querySelectorAll('#add-form .f-series').forEach(x => x.hidden = !series);
+  }
+  if (t.id === 'import-file' && t.files[0]) {
+    const reader = new FileReader();
+    reader.onload = () => { try { importData(JSON.parse(reader.result), 'this file'); } catch (err) { toast('That file could not be read.'); } t.value = ''; };
+    reader.readAsText(t.files[0]);
+  }
+});
+
+document.getElementById('add-form').addEventListener('submit', e => {
+  e.preventDefault();
+  const title = document.getElementById('add-title').value.trim();
+  if (!title) return;
+  const kind = document.getElementById('add-kind').value;
+  const item = normalize({ items: [{
+    title, kind,
+    minutes: document.getElementById('add-minutes').value,
+    episodes: document.getElementById('add-episodes').value,
+    epMinutes: document.getElementById('add-epmin').value,
+  }] }).items[0];
+  state.items.push(item);
+  save(); render({ settings: false });
+  document.getElementById('add-title').value = '';
+  document.getElementById('add-title').focus();
+  toast(`${title} added to your watchlist.`);
+});
+
+document.addEventListener('submit', e => {
+  const f = e.target.closest('[data-edit]');
+  if (!f) return;
+  e.preventDefault();
+  const it = byId(f.dataset.edit);
+  if (!it) return;
+  const fd = new FormData(f);
+  it.title = String(fd.get('title') || it.title).trim().slice(0, 200) || it.title;
+  if (it.kind === 'series') {
+    it.episodes = clampInt(fd.get('episodes'), 1, 500, it.episodes);
+    it.epMinutes = clampInt(fd.get('epMinutes'), 1, 300, it.epMinutes);
+    it.epsWatched = Math.min(it.epsWatched, it.episodes);
+  } else {
+    it.minutes = clampInt(fd.get('minutes'), 1, 1000, it.minutes);
+    it.progress = Math.min(it.progress, it.minutes);
+  }
+  editingId = null;
+  save(); render({ settings: false }); toast('Changes saved.');
+});
+
+/* ---------- boot ---------- */
+if (location.hash.startsWith('#sync=')) {
+  try { importData(JSON.parse(b64dec(location.hash.slice(6))), 'the sync link'); }
+  catch (err) { toast('That sync link is broken or incomplete.'); }
+  history.replaceState(null, '', location.pathname + location.search);
+}
+
+render();
+let lastDay = todayStr();
+setInterval(() => {
+  if (todayStr() !== lastDay) { lastDay = todayStr(); render({ settings: false }); }
+  else tickCountdown();
+}, 1000);
+window.addEventListener('storage', ev => { if (ev.key === KEY) { state = normalize(JSON.parse(ev.newValue || 'null')); render(); } });
+})();
+</script>
+</body>
+</html>
